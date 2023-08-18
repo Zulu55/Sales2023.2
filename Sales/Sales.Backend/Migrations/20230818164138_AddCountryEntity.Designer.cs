@@ -11,7 +11,7 @@ using Sales.Backend.Data;
 namespace Sales.Backend.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230817020755_AddCountryEntity")]
+    [Migration("20230818164138_AddCountryEntity")]
     partial class AddCountryEntity
     {
         /// <inheritdoc />
