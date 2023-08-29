@@ -24,20 +24,24 @@ namespace Sales.Frontend.Repositories
                 return null;
             }
 
-            var codigoEstatus = HttpResponseMessage.StatusCode;
-            if (codigoEstatus == HttpStatusCode.NotFound)
+            var statusCode = HttpResponseMessage.StatusCode;
+
+            if (statusCode == HttpStatusCode.NotFound)
             {
                 return "Recurso no encontrado";
             }
-            else if (codigoEstatus == HttpStatusCode.BadRequest)
+
+            if (statusCode == HttpStatusCode.BadRequest)
             {
                 return await HttpResponseMessage.Content.ReadAsStringAsync();
             }
-            else if (codigoEstatus == HttpStatusCode.Unauthorized)
+
+            if (statusCode == HttpStatusCode.Unauthorized)
             {
                 return "Tienes que logearte para hacer esta operación";
             }
-            else if (codigoEstatus == HttpStatusCode.Forbidden)
+
+            if (statusCode == HttpStatusCode.Forbidden)
             {
                 return "No tienes permisos para hacer esta operación";
             }

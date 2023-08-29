@@ -1,0 +1,19 @@
+﻿@page "/countries/create"
+
+<h3>Nuevo País</h3>
+
+<CountryForm Country="country" OnValidSubmit="Create" ReturnAction="Return"/>
+
+@code {
+    private Country country = new();
+
+    private void Create()
+    {
+
+    }
+
+    private void Return()
+    {
+
+    }
+}
