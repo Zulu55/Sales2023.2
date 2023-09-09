@@ -13,13 +13,13 @@ namespace Sales.Backend.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAsync()
+        public virtual async Task<IActionResult> GetAsync()
         {
             return Ok(await _unitOfWork.GetAsync());
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetAsync(int id)
+        public virtual async Task<IActionResult> GetAsync(int id)
         {
             var row = await _unitOfWork.GetAsync(id);
             if (row == null)
@@ -30,7 +30,7 @@ namespace Sales.Backend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostAsync(T model)
+        public virtual async Task<IActionResult> PostAsync(T model)
         {
             var result = await _unitOfWork.AddAsync(model);
             if (result.WasSuccess)
@@ -41,7 +41,7 @@ namespace Sales.Backend.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> PutAsync(T model)
+        public virtual async Task<IActionResult> PutAsync(T model)
         {
             var result = await _unitOfWork.UpdateAsync(model);
             if (result.WasSuccess)
@@ -52,7 +52,7 @@ namespace Sales.Backend.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync(int id)
+        public virtual async Task<IActionResult> DeleteAsync(int id)
         {
             var row = await _unitOfWork.GetAsync(id);
             if (row == null)
