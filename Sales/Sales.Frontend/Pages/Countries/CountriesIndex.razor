@@ -3,13 +3,13 @@
 @inject SweetAlertService sweetAlertService
 
 <h3>Paises</h3>
+<a href="/countries/create" class="btn btn-primary">Nuevo País</a>
 
 <GenericList MyList="countries">
     <NoRecords>
         <p>Aun no hay paises registrados.</p>
     </NoRecords>
     <Body>
-        <a href="/countries/create" class="btn btn-primary">Nuevo País</a>
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -22,11 +22,10 @@
                 @foreach (var country in countries!)
                 {
                     <tr>
-                        <td>@country.Name</td>
+                        <td><a href="/countries/details/@country.Id"> @country.Name</a></td>
                         <td>@country.StatesNumber</td>
                         <td>
                             <a class="btn btn-warning btn-sm" href="/countries/edit/@country.Id">Editar</a>
-                            <a class="btn btn-info btn-sm" href="/countries/details/@country.Id">Detalles</a>
                             <button class="btn btn-danger btn-sm" @onclick=@(() => DeleteAsync(country))>Borrar</button>
                         </td>
                     </tr>
