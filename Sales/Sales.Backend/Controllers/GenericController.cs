@@ -1,21 +1,41 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Sales.Backend.Data;
 using Sales.Backend.Intertfaces;
+using Sales.Shared.DTOs;
+using Sales.Shared.Helpers;
 
 namespace Sales.Backend.Controllers
 {
     public class GenericController<T> : Controller where T : class
     {
         private readonly IGenericUnitOfWork<T> _unitOfWork;
+        private readonly DataContext _context;
+        private readonly DbSet<T> _entity;
 
-        public GenericController(IGenericUnitOfWork<T> unitOfWork)
+        public GenericController(IGenericUnitOfWork<T> unitOfWork, DataContext context)
         {
             _unitOfWork = unitOfWork;
+            _context = context;
+            _entity = _context.Set<T>();
         }
 
         [HttpGet]
-        public virtual async Task<IActionResult> GetAsync()
+        public virtual async Task<IActionResult> GetAsync([FromQuery]PaginationDTO pagination)
         {
-            return Ok(await _unitOfWork.GetAsync());
+            var queryable = _entity.AsQueryable();
+            return Ok(await queryable
+                .Paginate(pagination)
+                .ToListAsync());
+        }
+
+        [HttpGet("totalPages")]
+        public virtual async Task<ActionResult> GetPagesAsync([FromQuery] PaginationDTO pagination)
+        {
+            var queryable = _entity.AsQueryable();
+            double count = await queryable.CountAsync();
+            double totalPages = Math.Ceiling(count / pagination.RecordsNumber);
+            return Ok(totalPages);
         }
 
         [HttpGet("{id}")]

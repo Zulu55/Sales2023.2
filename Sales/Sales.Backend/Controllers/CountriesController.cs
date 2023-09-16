@@ -2,7 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Sales.Backend.Data;
 using Sales.Backend.Intertfaces;
+using Sales.Shared.DTOs;
 using Sales.Shared.Entities;
+using Sales.Shared.Helpers;
 
 namespace Sales.Backend.Controllers
 {
@@ -12,16 +14,20 @@ namespace Sales.Backend.Controllers
     {
         private readonly DataContext _context;
 
-        public CountriesController(IGenericUnitOfWork<Country> unitOfWork, DataContext context) : base(unitOfWork)
+        public CountriesController(IGenericUnitOfWork<Country> unitOfWork, DataContext context) : base(unitOfWork, context)
         {
             _context = context;
         }
 
         [HttpGet]
-        public override async Task<IActionResult> GetAsync()
+        public override async Task<IActionResult> GetAsync([FromQuery] PaginationDTO pagination)
         {
-            return Ok(await _context.Countries
+            var queryable = _context.Countries
                 .Include(c => c.States)
+                .OrderBy(c => c.Name)
+                .AsQueryable();
+            return Ok(await queryable
+                .Paginate(pagination)
                 .ToListAsync());
         }
 
