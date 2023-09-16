@@ -3,19 +3,34 @@
 @inject SweetAlertService sweetAlertService
 
 <h3>Paises</h3>
-<a href="/countries/create" class="btn btn-primary">Nuevo País</a>
+<div class="mb-2" style="display: flex; flex-wrap:wrap; align-items: center;">
+    <div>
+        <a class="btn btn-primary" href="/countries/create">Nuevo País</a>
+    </div>
+    <div class="mx-2">
+        <input style="width: 400px;" type="text" class="form-control" id="titulo" placeholder="Buscar país..." @bind-value="Filter" />
+    </div>
+    <div>
+        <button type="button" class="btn btn-outline-primary" @onclick="ApplyFilterAsync">Filtrar</button>
+        <button type="button" class="btn btn-outline-danger" @onclick="CleanFilterAsync">Limpiar</button>
+    </div>
+</div>
 
 <GenericList MyList="countries">
     <NoRecords>
         <p>Aun no hay paises registrados.</p>
     </NoRecords>
     <Body>
+        <Pagination CurrentPage="currentPage"
+                    TotalPages="totalPages"
+                    SelectedPage="SelectedPageAsync" />
+
         <table class="table table-striped">
             <thead>
                 <tr>
                     <th>País</th>
-                    <th>Departamentos / Estados</th>
-                    <th></th>
+                    <th style="width:210px">Departamentos / Estados</th>
+                    <th style="width:140px"></th>
                 </tr>
             </thead>
             <tbody>
@@ -37,23 +52,99 @@
 
 @code {
     private List<Country>? countries;
+    private int currentPage = 1;
+    private int totalPages;
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string Page { get; set; } = string.Empty;
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string Filter { get; set; } = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
         await LoadAsync();
     }
 
-    private async Task LoadAsync()
+    private async Task SelectedPageAsync(int page)
     {
-        var response = await repository.GetAsync<List<Country>>("api/countries");
+        currentPage = page;
+        await LoadAsync(page);
+    }
+
+    private async Task LoadAsync(int page = 1)
+    {
+        if (!string.IsNullOrWhiteSpace(Page))
+        {
+            page = Convert.ToInt32(Page);
+        }
+
+        var ok = await LoadListAsync(page);
+        if (ok)
+        {
+            await LoadPagesAsync();
+        }
+    }
+
+    private async Task LoadPagesAsync()
+    {
+        var url = string.Empty;
+        if (string.IsNullOrEmpty(Filter))
+        {
+            url = $"api/countries/totalPages";
+        }
+        else
+        {
+            url = $"api/countries/totalPages?filter={Filter}";
+        }
+
+        var response = await repository.GetAsync<int>(url);
         if (response.Error)
         {
             var message = await response.GetErrorMessageAsync();
             await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
             return;
         }
+        totalPages = response.Response;
+    }
+
+    private async Task<bool> LoadListAsync(int page)
+    {
+        var url = string.Empty;
+        if (string.IsNullOrEmpty(Filter))
+        {
+            url = $"api/countries?page={page}";
+        }
+        else
+        {
+            url = $"api/countries?page={page}&filter={Filter}";
+        }
+
+        var response = await repository.GetAsync<List<Country>>(url);
+        if (response.Error)
+        {
+            var message = await response.GetErrorMessageAsync();
+            await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+            return false;
+        }
 
         countries = response.Response;
+        return true;
+    }
+
+    private async Task CleanFilterAsync()
+    {
+        Filter = string.Empty;
+        await ApplyFilterAsync();
+    }
+
+    private async Task ApplyFilterAsync()
+    {
+        int page = 1;
+        await LoadAsync(page);
+        await SelectedPageAsync(page);
     }
 
     private async Task DeleteAsync(Country country)
