@@ -10,11 +10,11 @@ namespace Sales.Backend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CountriesController : GenericController<Country>
+    public class CitiesController : GenericController<City>
     {
         private readonly DataContext _context;
 
-        public CountriesController(IGenericUnitOfWork<Country> unitOfWork, DataContext context) : base(unitOfWork, context)
+        public CitiesController(IGenericUnitOfWork<City> unitOfWork, DataContext context) : base(unitOfWork, context)
         {
             _context = context;
         }
@@ -22,8 +22,8 @@ namespace Sales.Backend.Controllers
         [HttpGet]
         public override async Task<IActionResult> GetAsync([FromQuery] PaginationDTO pagination)
         {
-            var queryable = _context.Countries
-                .Include(c => c.States)
+            var queryable = _context.Cities
+                .Where(x => x.State!.Id == pagination.Id)
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(pagination.Filter))
@@ -32,7 +32,7 @@ namespace Sales.Backend.Controllers
             }
 
             return Ok(await queryable
-                .OrderBy(c => c.Name)
+                .OrderBy(x => x.Name)
                 .Paginate(pagination)
                 .ToListAsync());
         }
@@ -40,7 +40,9 @@ namespace Sales.Backend.Controllers
         [HttpGet("totalPages")]
         public override async Task<ActionResult> GetPagesAsync([FromQuery] PaginationDTO pagination)
         {
-            var queryable = _context.Countries.AsQueryable();
+            var queryable = _context.Cities
+                .Where(x => x.State!.Id == pagination.Id)
+                .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(pagination.Filter))
             {
@@ -51,20 +53,5 @@ namespace Sales.Backend.Controllers
             double totalPages = Math.Ceiling(count / pagination.RecordsNumber);
             return Ok(totalPages);
         }
-
-        [HttpGet("{id}")]
-        public override async Task<IActionResult> GetAsync(int id)
-        {
-            var country = await _context.Countries
-                .Include(c => c.States!)
-                .ThenInclude(s => s.Cities)
-                .FirstOrDefaultAsync(c => c.Id == id);
-            if (country == null)
-            {
-                return NotFound();
-            }
-            return Ok(country);
-        }
-
     }
 }
