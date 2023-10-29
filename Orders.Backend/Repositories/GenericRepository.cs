@@ -133,22 +133,11 @@ namespace Orders.Backend.Repositories
 
         private Response<T> DbUpdateExceptionResponse(DbUpdateException dbUpdateException)
         {
-            if (dbUpdateException.InnerException!.Message.Contains("duplicate"))
+            return new Response<T>
             {
-                return new Response<T>
-                {
-                    WasSuccess = false,
-                    Message = "Ya existe el registro que estas intentando crear."
-                };
-            }
-            else
-            {
-                return new Response<T>
-                {
-                    WasSuccess = false,
-                    Message = dbUpdateException.InnerException.Message
-                };
-            }
+                WasSuccess = false,
+                Message = "Ya existe el registro que estas intentando crear."
+            };
         }
     }
 }
