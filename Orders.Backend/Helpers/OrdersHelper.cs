@@ -13,7 +13,7 @@ namespace Orders.Backend.Helpers
         private readonly IProductsUnitOfWork _productsUnitOfWork;
         private readonly IOrdersUnitOfWork _ordersUnitOfWork;
 
-        public OrdersHelper(DataContext context, IUserHelper userHelper, ITemporalOrdersUnitOfWork temporalOrdersUnitOfWork, IProductsUnitOfWork productsUnitOfWork, IOrdersUnitOfWork ordersUnitOfWork)
+        public OrdersHelper(IUserHelper userHelper, ITemporalOrdersUnitOfWork temporalOrdersUnitOfWork, IProductsUnitOfWork productsUnitOfWork, IOrdersUnitOfWork ordersUnitOfWork)
         {
             _userHelper = userHelper;
             _temporalOrdersUnitOfWork = temporalOrdersUnitOfWork;
