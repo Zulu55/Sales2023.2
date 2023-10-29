@@ -1,0 +1,40 @@
+﻿@page "/Login"
+
+<div class="row">
+    <div class="col-12">
+        <EditForm Model="loginDTO" OnValidSubmit="LoginAsync">
+            <DataAnnotationsValidator />
+
+            <div class="card bg-light">
+                <div class="card-header justify-content-center">
+                    <span>
+                        <i class="oi oi-account-login" /> Iniciar Sesión
+                        <button class="btn btn-sm btn-primary float-end" @onclick=@(() => LoginAsync())><i class="oi oi-check" /> Iniciar Sesión</button>
+                        <button class="btn btn-sm mx-1 btn-danger float-end" @onclick=@(() => CloseModalAsync())><i class="oi oi-ban" /> Cancelar</button>
+                    </span>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label>Email:</label>
+                        <div>
+                            <InputText class="form-control" @bind-Value="@loginDTO.Email" />
+                            <ValidationMessage For="@(() => loginDTO.Email)" />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label>Contraseña:</label>
+                        <div>
+                            <InputText type="password" class="form-control" @bind-Value="@loginDTO.Password" />
+                            <ValidationMessage For="@(() => loginDTO.Password)" />
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <p><a class="btn btn-link" href="/Register">¿No eres usuario aún? Resgitrate aquí</a></p>
+                    <p><a class="btn btn-link" href="/ResendToken">Reenviar correro de activación de cuenta</a></p>
+                    <p><a class="btn btn-link" href="/RecoverPassword">¿Has olvidado tu contraseña?</a></p>
+                </div>
+            </div>
+        </EditForm>
+    </div>
+</div>
