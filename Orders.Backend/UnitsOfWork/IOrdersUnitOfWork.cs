@@ -13,5 +13,7 @@ namespace Orders.Backend.UnitsOfWork
         Task<Response<Order>> GetAsync(int id);
 
         Task<Response<Order>> UpdateFullAsync(string email, OrderDTO orderDTO);
+
+        Task<Response<Order>> AddAsync(Order order);
     }
 }

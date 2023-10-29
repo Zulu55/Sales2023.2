@@ -15,5 +15,7 @@ namespace Orders.Backend.UnitsOfWork
         Task<Response<TemporalOrder>> GetAsync(int id);
 
         Task<Response<TemporalOrder>> PutFullAsync(TemporalOrderDTO temporalOrderDTO);
+
+        Task<Response<TemporalOrder>> DeleteAsync(int id);
     }
 }

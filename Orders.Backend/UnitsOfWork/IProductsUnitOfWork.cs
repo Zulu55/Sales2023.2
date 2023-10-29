@@ -19,5 +19,7 @@ namespace Orders.Backend.UnitsOfWork
         Task<Response<ImageDTO>> AddImageAsync(ImageDTO imageDTO);
 
         Task<Response<ImageDTO>> RemoveLastImageAsync(ImageDTO imageDTO);
+
+        Task<Response<Product>> UpdateAsync(Product product);
     }
 }

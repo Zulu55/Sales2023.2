@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Orders.Backend.Data;
+﻿using Orders.Backend.Data;
+using Orders.Backend.UnitsOfWork;
 using Orders.Shared.Entites;
 using Orders.Shared.Enums;
 using Orders.Shared.Responses;
@@ -8,36 +8,48 @@ namespace Orders.Backend.Helpers
 {
     public class OrdersHelper : IOrdersHelper
     {
-        private readonly DataContext _context;
+        private readonly IUserHelper _userHelper;
+        private readonly ITemporalOrdersUnitOfWork _temporalOrdersUnitOfWork;
+        private readonly IProductsUnitOfWork _productsUnitOfWork;
+        private readonly IOrdersUnitOfWork _ordersUnitOfWork;
 
-        public OrdersHelper(DataContext context)
+        public OrdersHelper(DataContext context, IUserHelper userHelper, ITemporalOrdersUnitOfWork temporalOrdersUnitOfWork, IProductsUnitOfWork productsUnitOfWork, IOrdersUnitOfWork ordersUnitOfWork)
         {
-            _context = context;
+            _userHelper = userHelper;
+            _temporalOrdersUnitOfWork = temporalOrdersUnitOfWork;
+            _productsUnitOfWork = productsUnitOfWork;
+            _ordersUnitOfWork = ordersUnitOfWork;
         }
 
         public async Task<Response<bool>> ProcessOrderAsync(string email, string remarks)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
+            var user = await _userHelper.GetUserAsync(email);
             if (user == null)
             {
-                return new Shared.Responses.Response<bool>
+                return new Response<bool>
                 {
                     WasSuccess = false,
                     Message = "Usuario no válido"
                 };
             }
+            var actionTemporalOrders = await _temporalOrdersUnitOfWork.GetAsync(email);
+            if (!actionTemporalOrders.WasSuccess)
+            {
+                return new Response<bool>
+                {
+                    WasSuccess = false,
+                    Message = "No hay detalle en la orden"
+                };
+            }
 
-            var temporalOrders = await _context.TemporalOrders
-                .Include(x => x.Product)
-                .Where(x => x.User!.Email == email)
-                .ToListAsync();
-            var response = await CheckInventoryAsync(temporalOrders);
+            var temporalOrders = actionTemporalOrders.Result as List<TemporalOrder>;
+            var response = await CheckInventoryAsync(temporalOrders!);
             if (!response.WasSuccess)
             {
                 return response;
             }
 
-            Order sale = new()
+            var order = new Order
             {
                 Date = DateTime.UtcNow,
                 User = user,
@@ -46,27 +58,30 @@ namespace Orders.Backend.Helpers
                 OrderStatus = OrderStatus.New
             };
 
-            foreach (var temporalOrder in temporalOrders)
+            foreach (var temporalOrder in temporalOrders!)
             {
-                sale.OrderDetails.Add(new OrderDetail
+                order.OrderDetails.Add(new OrderDetail
                 {
                     Product = temporalOrder.Product,
                     Quantity = temporalOrder.Quantity,
                     Remarks = temporalOrder.Remarks,
                 });
 
-                Product? product = await _context.Products.FindAsync(temporalOrder.Product!.Id);
-                if (product != null)
+                var actionProduct = await _productsUnitOfWork.GetAsync(temporalOrder.Product!.Id);
+                if (actionProduct.WasSuccess)
                 {
-                    product.Stock -= temporalOrder.Quantity;
-                    _context.Products.Update(product);
+                    var product = actionProduct.Result;
+                    if (product != null)
+                    {
+                        product.Stock -= temporalOrder.Quantity;
+                        await _productsUnitOfWork.UpdateAsync(product);
+                    }
                 }
 
-                _context.TemporalOrders.Remove(temporalOrder);
+                await _temporalOrdersUnitOfWork.DeleteAsync(temporalOrder.Id);
             }
 
-            _context.Orders.Add(sale);
-            await _context.SaveChangesAsync();
+            await _ordersUnitOfWork.AddAsync(order);
             return response;
         }
 
@@ -75,13 +90,22 @@ namespace Orders.Backend.Helpers
             var response = new Response<bool>() { WasSuccess = true };
             foreach (var temporalOrder in temporalOrders)
             {
-                Product? product = await _context.Products.FirstOrDefaultAsync(x => x.Id == temporalOrder.Product!.Id);
+                var actionProduct = await _productsUnitOfWork.GetAsync(temporalOrder.Product!.Id);
+                if (!actionProduct.WasSuccess)
+                {
+                    response.WasSuccess = false;
+                    response.Message = $"El producto {temporalOrder.Product!.Id}, ya no está disponible";
+                    return response;
+                }
+
+                var product = actionProduct.Result;
                 if (product == null)
                 {
                     response.WasSuccess = false;
-                    response.Message = $"El producto {temporalOrder.Product!.Name}, ya no está disponible";
+                    response.Message = $"El producto {temporalOrder.Product!.Id}, ya no está disponible";
                     return response;
                 }
+
                 if (product.Stock < temporalOrder.Quantity)
                 {
                     response.WasSuccess = false;
