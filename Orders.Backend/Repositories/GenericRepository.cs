@@ -29,9 +29,9 @@ namespace Orders.Backend.Repositories
                     Result = entity
                 };
             }
-            catch (DbUpdateException dbUpdateException)
+            catch (DbUpdateException)
             {
-                return DbUpdateExceptionResponse(dbUpdateException);
+                return DbUpdateExceptionResponse();
             }
             catch (Exception exception)
             {
@@ -112,9 +112,9 @@ namespace Orders.Backend.Repositories
                     Result = entity
                 };
             }
-            catch (DbUpdateException dbUpdateException)
+            catch (DbUpdateException)
             {
-                return DbUpdateExceptionResponse(dbUpdateException);
+                return DbUpdateExceptionResponse();
             }
             catch (Exception exception)
             {
@@ -131,7 +131,7 @@ namespace Orders.Backend.Repositories
             };
         }
 
-        private Response<T> DbUpdateExceptionResponse(DbUpdateException dbUpdateException)
+        private Response<T> DbUpdateExceptionResponse()
         {
             return new Response<T>
             {

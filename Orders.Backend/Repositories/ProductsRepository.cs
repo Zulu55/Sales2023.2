@@ -129,21 +129,12 @@ namespace Orders.Backend.Repositories
                     Result = newProduct
                 };
             }
-            catch (DbUpdateException dbUpdateException)
+            catch (DbUpdateException)
             {
-                if (dbUpdateException.InnerException!.Message.Contains("duplicate"))
-                {
-                    return new Response<Product>
-                    {
-                        WasSuccess = false,
-                        Message = "Ya existe un producto con el mismo nombre."
-                    };
-                }
-
                 return new Response<Product>
                 {
                     WasSuccess = false,
-                    Message = dbUpdateException.Message
+                    Message = "Ya existe un producto con el mismo nombre."
                 };
             }
             catch (Exception exception)
@@ -186,21 +177,12 @@ namespace Orders.Backend.Repositories
                     Result = product
                 };
             }
-            catch (DbUpdateException dbUpdateException)
+            catch (DbUpdateException)
             {
-                if (dbUpdateException.InnerException!.Message.Contains("duplicate"))
-                {
-                    return new Response<Product>
-                    {
-                        WasSuccess = false,
-                        Message = "Ya existe un producto con el mismo nombre."
-                    };
-                }
-
                 return new Response<Product>
                 {
                     WasSuccess = false,
-                    Message = dbUpdateException.Message
+                    Message = "Ya existe un producto con el mismo nombre."
                 };
             }
             catch (Exception exception)
@@ -225,11 +207,6 @@ namespace Orders.Backend.Repositories
                     WasSuccess = false,
                     Message = "Producto no existe"
                 };
-            }
-
-            if (product.ProductImages is null)
-            {
-                product.ProductImages = new List<ProductImage>();
             }
 
             for (int i = 0; i < imageDTO.Images.Count; i++)

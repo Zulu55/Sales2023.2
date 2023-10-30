@@ -28,13 +28,13 @@ namespace Orders.Tests.UnitsOfWork
             var email = "test@example.com";
             var dto = new TemporalOrderDTO();
             var response = new Response<TemporalOrderDTO>();
-            _temporalOrdersRepositoryMock.Setup(repo => repo.AddFullAsync(email, dto))
+            _temporalOrdersRepositoryMock.Setup(x => x.AddFullAsync(email, dto))
                 .ReturnsAsync(response);
 
             var result = await _unitOfWork.AddFullAsync(email, dto);
 
             Assert.AreEqual(response, result);
-            _temporalOrdersRepositoryMock.Verify(repo => repo.AddFullAsync(email, dto), Times.Once);
+            _temporalOrdersRepositoryMock.Verify(x => x.AddFullAsync(email, dto), Times.Once);
         }
 
         [TestMethod]
@@ -42,13 +42,13 @@ namespace Orders.Tests.UnitsOfWork
         {
             var email = "test@example.com";
             var response = new Response<IEnumerable<TemporalOrder>>();
-            _temporalOrdersRepositoryMock.Setup(repo => repo.GetAsync(email))
+            _temporalOrdersRepositoryMock.Setup(x => x.GetAsync(email))
                 .ReturnsAsync(response);
 
             var result = await _unitOfWork.GetAsync(email);
 
             Assert.AreEqual(response, result);
-            _temporalOrdersRepositoryMock.Verify(repo => repo.GetAsync(email), Times.Once);
+            _temporalOrdersRepositoryMock.Verify(x => x.GetAsync(email), Times.Once);
         }
 
         [TestMethod]
@@ -56,13 +56,13 @@ namespace Orders.Tests.UnitsOfWork
         {
             var email = "test@example.com";
             var response = new Response<int>();
-            _temporalOrdersRepositoryMock.Setup(repo => repo.GetCountAsync(email))
+            _temporalOrdersRepositoryMock.Setup(x => x.GetCountAsync(email))
                 .ReturnsAsync(response);
 
             var result = await _unitOfWork.GetCountAsync(email);
 
             Assert.AreEqual(response, result);
-            _temporalOrdersRepositoryMock.Verify(repo => repo.GetCountAsync(email), Times.Once);
+            _temporalOrdersRepositoryMock.Verify(x => x.GetCountAsync(email), Times.Once);
         }
 
         [TestMethod]
@@ -70,13 +70,13 @@ namespace Orders.Tests.UnitsOfWork
         {
             var dto = new TemporalOrderDTO();
             var response = new Response<TemporalOrder>();
-            _temporalOrdersRepositoryMock.Setup(repo => repo.PutFullAsync(dto))
+            _temporalOrdersRepositoryMock.Setup(x => x.PutFullAsync(dto))
                 .ReturnsAsync(response);
 
             var result = await _unitOfWork.PutFullAsync(dto);
 
             Assert.AreEqual(response, result);
-            _temporalOrdersRepositoryMock.Verify(repo => repo.PutFullAsync(dto), Times.Once);
+            _temporalOrdersRepositoryMock.Verify(x => x.PutFullAsync(dto), Times.Once);
         }
 
         [TestMethod]
@@ -84,13 +84,13 @@ namespace Orders.Tests.UnitsOfWork
         {
             int id = 1;
             var response = new Response<TemporalOrder>();
-            _temporalOrdersRepositoryMock.Setup(repo => repo.GetAsync(id))
+            _temporalOrdersRepositoryMock.Setup(x => x.GetAsync(id))
                 .ReturnsAsync(response);
 
             var result = await _unitOfWork.GetAsync(id);
 
             Assert.AreEqual(response, result);
-            _temporalOrdersRepositoryMock.Verify(repo => repo.GetAsync(id), Times.Once);
+            _temporalOrdersRepositoryMock.Verify(x => x.GetAsync(id), Times.Once);
         }
     }
 }
