@@ -50,7 +50,7 @@ namespace Orders.Tests.Repositories
 
             // Assert
             Assert.IsTrue(response.WasSuccess);
-            var categories = response.Result.ToList();
+            var categories = response.Result!.ToList();
             Assert.AreEqual(1, categories.Count);
             Assert.AreEqual("Books", categories.First().Name);
         }
@@ -66,7 +66,7 @@ namespace Orders.Tests.Repositories
 
             // Assert
             Assert.IsTrue(response.WasSuccess);
-            var categories = response.Result.ToList();
+            var categories = response.Result!.ToList();
             Assert.AreEqual(3, categories.Count);
         }
 

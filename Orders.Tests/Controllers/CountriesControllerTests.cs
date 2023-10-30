@@ -28,7 +28,7 @@ namespace Orders.Tests.Controllers
         {
             // Arrange
             var response = new List<Country> { new Country { Id = 1, Name = "Country" } };
-            _mockCountriesUnitOfWork.Setup(uow => uow.GetComboAsync())
+            _mockCountriesUnitOfWork.Setup(x => x.GetComboAsync())
                 .ReturnsAsync(response);
 
             // Act
@@ -38,6 +38,7 @@ namespace Orders.Tests.Controllers
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
             var okResult = result as OkObjectResult;
             Assert.AreEqual(response, okResult?.Value);
+            _mockCountriesUnitOfWork.Verify(x => x.GetComboAsync(), Times.Once());
         }
 
         [TestMethod]
@@ -51,7 +52,7 @@ namespace Orders.Tests.Controllers
                 new Country { Id = 2, Name = "Country2" }
             };
             var response = new Response<IEnumerable<Country>> { WasSuccess = true, Result = countries };
-            _mockCountriesUnitOfWork.Setup(uow => uow.GetAsync(pagination))
+            _mockCountriesUnitOfWork.Setup(x => x.GetAsync(pagination))
                 .ReturnsAsync(response);
 
             // Act
@@ -61,6 +62,7 @@ namespace Orders.Tests.Controllers
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
             var okResult = result as OkObjectResult;
             Assert.AreEqual(countries, okResult?.Value);
+            _mockCountriesUnitOfWork.Verify(x => x.GetAsync(pagination), Times.Once());
         }
 
         [TestMethod]
@@ -74,7 +76,7 @@ namespace Orders.Tests.Controllers
                 new Country { Id = 2, Name = "Country2" }
             };
             var response = new Response<IEnumerable<Country>> { WasSuccess = false, Result = countries };
-            _mockCountriesUnitOfWork.Setup(uow => uow.GetAsync(pagination))
+            _mockCountriesUnitOfWork.Setup(x => x.GetAsync(pagination))
                 .ReturnsAsync(response);
 
             // Act
@@ -82,6 +84,7 @@ namespace Orders.Tests.Controllers
 
             // Assert
             Assert.IsInstanceOfType(result, typeof(BadRequestResult));
+            _mockCountriesUnitOfWork.Verify(x => x.GetAsync(pagination), Times.Once());
         }
 
         [TestMethod]
@@ -91,7 +94,7 @@ namespace Orders.Tests.Controllers
             var pagination = new PaginationDTO();
             var totalPages = 5;
             var response = new Response<int> { WasSuccess = true, Result = totalPages };
-            _mockCountriesUnitOfWork.Setup(uow => uow.GetTotalPagesAsync(pagination)).ReturnsAsync(response);
+            _mockCountriesUnitOfWork.Setup(x => x.GetTotalPagesAsync(pagination)).ReturnsAsync(response);
 
             // Act
             var result = await _controller.GetPagesAsync(pagination);
@@ -100,6 +103,7 @@ namespace Orders.Tests.Controllers
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
             var okResult = result as OkObjectResult;
             Assert.AreEqual(totalPages, okResult?.Value);
+            _mockCountriesUnitOfWork.Verify(x => x.GetTotalPagesAsync(pagination), Times.Once());
         }
 
         [TestMethod]
@@ -109,13 +113,14 @@ namespace Orders.Tests.Controllers
             var pagination = new PaginationDTO();
             var totalPages = 5;
             var response = new Response<int> { WasSuccess = false };
-            _mockCountriesUnitOfWork.Setup(uow => uow.GetTotalPagesAsync(pagination)).ReturnsAsync(response);
+            _mockCountriesUnitOfWork.Setup(x => x.GetTotalPagesAsync(pagination)).ReturnsAsync(response);
 
             // Act
             var result = await _controller.GetPagesAsync(pagination);
 
             // Assert
             Assert.IsInstanceOfType(result, typeof(BadRequestResult));
+            _mockCountriesUnitOfWork.Verify(x => x.GetTotalPagesAsync(pagination), Times.Once());
         }
 
         [TestMethod]
@@ -125,7 +130,7 @@ namespace Orders.Tests.Controllers
             var countryId = 1;
             var country = new Country { Id = countryId, Name = "Country1" };
             var response = new Response<Country> { WasSuccess = true, Result = country };
-            _mockCountriesUnitOfWork.Setup(uow => uow.GetAsync(countryId)).ReturnsAsync(response);
+            _mockCountriesUnitOfWork.Setup(x => x.GetAsync(countryId)).ReturnsAsync(response);
 
             // Act
             var result = await _controller.GetAsync(countryId);
@@ -134,6 +139,7 @@ namespace Orders.Tests.Controllers
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
             var okResult = result as OkObjectResult;
             Assert.AreEqual(country, okResult?.Value);
+            _mockCountriesUnitOfWork.Verify(x => x.GetAsync(countryId), Times.Once());
         }
 
         [TestMethod]
@@ -142,7 +148,7 @@ namespace Orders.Tests.Controllers
             // Arrange
             var countryId = 1;
             var response = new Response<Country> { WasSuccess = false, Message = "Not Found" };
-            _mockCountriesUnitOfWork.Setup(uow => uow.GetAsync(countryId)).ReturnsAsync(response);
+            _mockCountriesUnitOfWork.Setup(x => x.GetAsync(countryId)).ReturnsAsync(response);
 
             // Act
             var result = await _controller.GetAsync(countryId);
@@ -151,6 +157,7 @@ namespace Orders.Tests.Controllers
             Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
             var notFoundResult = result as NotFoundObjectResult;
             Assert.AreEqual("Not Found", notFoundResult?.Value);
+            _mockCountriesUnitOfWork.Verify(x => x.GetAsync(countryId), Times.Once());
         }
     }
 }

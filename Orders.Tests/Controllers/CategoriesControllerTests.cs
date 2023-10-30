@@ -28,7 +28,7 @@ namespace Orders.Tests.Controllers
         {
             // Arrange
             var comboData = new List<Category> { new Category() };
-            _mockCategoriesUnitOfWork.Setup(uow => uow.GetComboAsync()).ReturnsAsync(comboData);
+            _mockCategoriesUnitOfWork.Setup(x => x.GetComboAsync()).ReturnsAsync(comboData);
 
             // Act
             var result = await _controller.GetComboAsync();
@@ -37,6 +37,7 @@ namespace Orders.Tests.Controllers
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
             var okResult = result as OkObjectResult;
             Assert.AreEqual(comboData, okResult!.Value);
+            _mockCategoriesUnitOfWork.Verify(x => x.GetComboAsync(), Times.Once());
         }
 
         [TestMethod]
@@ -45,7 +46,7 @@ namespace Orders.Tests.Controllers
             // Arrange
             var pagination = new PaginationDTO();
             var response = new Response<IEnumerable<Category>> { WasSuccess = true };
-            _mockCategoriesUnitOfWork.Setup(uow => uow.GetAsync(pagination)).ReturnsAsync(response);
+            _mockCategoriesUnitOfWork.Setup(x => x.GetAsync(pagination)).ReturnsAsync(response);
 
             // Act
             var result = await _controller.GetAsync(pagination);
@@ -54,6 +55,7 @@ namespace Orders.Tests.Controllers
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
             var okResult = result as OkObjectResult;
             Assert.AreEqual(response.Result, okResult!.Value);
+            _mockCategoriesUnitOfWork.Verify(x => x.GetAsync(pagination), Times.Once());
         }
 
         [TestMethod]
@@ -62,13 +64,14 @@ namespace Orders.Tests.Controllers
             // Arrange
             var pagination = new PaginationDTO();
             var response = new Response<IEnumerable<Category>> { WasSuccess = false };
-            _mockCategoriesUnitOfWork.Setup(uow => uow.GetAsync(pagination)).ReturnsAsync(response);
+            _mockCategoriesUnitOfWork.Setup(x => x.GetAsync(pagination)).ReturnsAsync(response);
 
             // Act
             var result = await _controller.GetAsync(pagination);
 
             // Assert
             Assert.IsInstanceOfType(result, typeof(BadRequestResult));
+            _mockCategoriesUnitOfWork.Verify(x => x.GetAsync(pagination), Times.Once());
         }
 
         [TestMethod]
@@ -77,7 +80,7 @@ namespace Orders.Tests.Controllers
             // Arrange
             var pagination = new PaginationDTO();
             var action = new Response<int> { WasSuccess = true, Result = 5 };
-            _mockCategoriesUnitOfWork.Setup(uow => uow.GetTotalPagesAsync(pagination)).ReturnsAsync(action);
+            _mockCategoriesUnitOfWork.Setup(x => x.GetTotalPagesAsync(pagination)).ReturnsAsync(action);
 
             // Act
             var result = await _controller.GetPagesAsync(pagination);
@@ -86,6 +89,7 @@ namespace Orders.Tests.Controllers
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
             var okResult = result as OkObjectResult;
             Assert.AreEqual(action.Result, okResult!.Value);
+            _mockCategoriesUnitOfWork.Verify(x => x.GetTotalPagesAsync(pagination), Times.Once());
         }
 
         [TestMethod]
@@ -94,13 +98,14 @@ namespace Orders.Tests.Controllers
             // Arrange
             var pagination = new PaginationDTO();
             var action = new Response<int> { WasSuccess = false };
-            _mockCategoriesUnitOfWork.Setup(uow => uow.GetTotalPagesAsync(pagination)).ReturnsAsync(action);
+            _mockCategoriesUnitOfWork.Setup(x => x.GetTotalPagesAsync(pagination)).ReturnsAsync(action);
 
             // Act
             var result = await _controller.GetPagesAsync(pagination);
 
             // Assert
             Assert.IsInstanceOfType(result, typeof(BadRequestResult));
+            _mockCategoriesUnitOfWork.Verify(x => x.GetTotalPagesAsync(pagination), Times.Once());
         }
     }
 }

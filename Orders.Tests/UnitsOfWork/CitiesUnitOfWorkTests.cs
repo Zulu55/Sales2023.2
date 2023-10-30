@@ -26,7 +26,7 @@ namespace Orders.Tests.UnitsOfWork
             // Arrange
             var pagination = new PaginationDTO();
             var expectedResponse = new Response<IEnumerable<City>> { WasSuccess = true, Result = new List<City>() };
-            _mockCitiesRepository.Setup(repo => repo.GetAsync(pagination))
+            _mockCitiesRepository.Setup(x => x.GetAsync(pagination))
                 .ReturnsAsync(expectedResponse);
 
             // Act
@@ -35,6 +35,7 @@ namespace Orders.Tests.UnitsOfWork
             // Assert
             Assert.IsTrue(result.WasSuccess);
             Assert.AreEqual(expectedResponse.Result, result.Result);
+            _mockCitiesRepository.Verify(x => x.GetAsync(pagination), Times.Once);
         }
 
         [TestMethod]
@@ -43,7 +44,7 @@ namespace Orders.Tests.UnitsOfWork
             // Arrange
             var pagination = new PaginationDTO();
             var expectedResponse = new Response<int> { WasSuccess = true, Result = 5 };
-            _mockCitiesRepository.Setup(repo => repo.GetTotalPagesAsync(pagination))
+            _mockCitiesRepository.Setup(x => x.GetTotalPagesAsync(pagination))
                 .ReturnsAsync(expectedResponse);
 
             // Act
@@ -52,6 +53,7 @@ namespace Orders.Tests.UnitsOfWork
             // Assert
             Assert.IsTrue(result.WasSuccess);
             Assert.AreEqual(expectedResponse.Result, result.Result);
+            _mockCitiesRepository.Verify(x => x.GetTotalPagesAsync(pagination), Times.Once);
         }
 
         [TestMethod]
@@ -60,7 +62,7 @@ namespace Orders.Tests.UnitsOfWork
             // Arrange
             var stateId = 1;
             var expectedCities = new List<City> { new City { Id = 1, Name = "City1" }, new City { Id = 2, Name = "City2" } };
-            _mockCitiesRepository.Setup(repo => repo.GetComboAsync(stateId))
+            _mockCitiesRepository.Setup(x => x.GetComboAsync(stateId))
                 .ReturnsAsync(expectedCities);
 
             // Act
@@ -68,6 +70,7 @@ namespace Orders.Tests.UnitsOfWork
 
             // Assert
             Assert.AreEqual(expectedCities, result);
+            _mockCitiesRepository.Verify(x => x.GetComboAsync(stateId), Times.Once);
         }
     }
 }

@@ -29,7 +29,7 @@ namespace Orders.Tests.Controllers
         {
             // Arrange
             var response = new Response<IEnumerable<object>> { WasSuccess = true };
-            _mockUnitOfWork.Setup(u => u.GetAsync(It.IsAny<PaginationDTO>()))
+            _mockUnitOfWork.Setup(x => x.GetAsync(It.IsAny<PaginationDTO>()))
                 .ReturnsAsync(response);
 
             var controller = new GenericController<object>(_mockUnitOfWork.Object);
@@ -39,6 +39,7 @@ namespace Orders.Tests.Controllers
 
             // Assert
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+            _mockUnitOfWork.Verify(x => x.GetAsync(It.IsAny<PaginationDTO>()), Times.Once());
         }
 
         [TestMethod]
@@ -46,7 +47,7 @@ namespace Orders.Tests.Controllers
         {
             // Arrange
             var response = new Response<IEnumerable<object>> { WasSuccess = false };
-            _mockUnitOfWork.Setup(u => u.GetAsync(It.IsAny<PaginationDTO>()))
+            _mockUnitOfWork.Setup(x => x.GetAsync(It.IsAny<PaginationDTO>()))
                 .ReturnsAsync(response);
 
             var controller = new GenericController<object>(_mockUnitOfWork.Object);
@@ -56,6 +57,7 @@ namespace Orders.Tests.Controllers
 
             // Assert
             Assert.IsInstanceOfType(result, typeof(BadRequestResult));
+            _mockUnitOfWork.Verify(x => x.GetAsync(It.IsAny<PaginationDTO>()), Times.Once());
         }
 
         [TestMethod]
@@ -63,8 +65,8 @@ namespace Orders.Tests.Controllers
         {
             // Arrange
             var response = new Response<int> { WasSuccess = true, Result = 5 };
-            _mockUnitOfWork.Setup(u => u.GetTotalPagesAsync(It.IsAny<PaginationDTO>()))
-                    .ReturnsAsync(response);
+            _mockUnitOfWork.Setup(x => x.GetTotalPagesAsync(It.IsAny<PaginationDTO>()))
+                .ReturnsAsync(response);
 
             var controller = new GenericController<object>(_mockUnitOfWork.Object);
 
@@ -75,6 +77,7 @@ namespace Orders.Tests.Controllers
             var okResult = result as OkObjectResult;
             Assert.IsNotNull(okResult);
             Assert.AreEqual(5, okResult.Value);
+            _mockUnitOfWork.Verify(x => x.GetTotalPagesAsync(It.IsAny<PaginationDTO>()), Times.Once());
         }
 
         [TestMethod]
@@ -82,8 +85,8 @@ namespace Orders.Tests.Controllers
         {
             // Arrange
             var response = new Response<int> { WasSuccess = false };
-            _mockUnitOfWork.Setup(u => u.GetTotalPagesAsync(It.IsAny<PaginationDTO>()))
-                            .ReturnsAsync(response);
+            _mockUnitOfWork.Setup(x => x.GetTotalPagesAsync(It.IsAny<PaginationDTO>()))
+                .ReturnsAsync(response);
 
             var controller = new GenericController<object>(_mockUnitOfWork.Object);
 
@@ -92,6 +95,7 @@ namespace Orders.Tests.Controllers
 
             // Assert
             Assert.IsInstanceOfType(result, typeof(BadRequestResult));
+            _mockUnitOfWork.Verify(x => x.GetTotalPagesAsync(It.IsAny<PaginationDTO>()), Times.Once());
         }
 
         [TestMethod]
@@ -99,7 +103,7 @@ namespace Orders.Tests.Controllers
         {
             // Arrange
             var response = new Response<object> { WasSuccess = true, Result = _testModel };
-            _mockUnitOfWork.Setup(u => u.GetAsync(It.IsAny<int>()))
+            _mockUnitOfWork.Setup(x => x.GetAsync(It.IsAny<int>()))
                 .ReturnsAsync(response);
 
             var controller = new GenericController<object>(_mockUnitOfWork.Object);
@@ -111,6 +115,7 @@ namespace Orders.Tests.Controllers
             var okResult = result as OkObjectResult;
             Assert.IsNotNull(okResult);
             Assert.AreEqual(_testModel, okResult.Value);
+            _mockUnitOfWork.Verify(x => x.GetAsync(It.IsAny<int>()), Times.Once());
         }
 
         [TestMethod]
@@ -118,7 +123,7 @@ namespace Orders.Tests.Controllers
         {
             // Arrange
             var response = new Response<object> { WasSuccess = false };
-            _mockUnitOfWork.Setup(u => u.GetAsync(It.IsAny<int>()))
+            _mockUnitOfWork.Setup(x => x.GetAsync(It.IsAny<int>()))
                 .ReturnsAsync(response);
 
             var controller = new GenericController<object>(_mockUnitOfWork.Object);
@@ -128,6 +133,7 @@ namespace Orders.Tests.Controllers
 
             // Assert
             Assert.IsInstanceOfType(result, typeof(NotFoundResult));
+            _mockUnitOfWork.Verify(x => x.GetAsync(It.IsAny<int>()), Times.Once());
         }
 
         [TestMethod]
@@ -135,7 +141,7 @@ namespace Orders.Tests.Controllers
         {
             // Arrange
             var response = new Response<object> { WasSuccess = true, Result = _testModel };
-            _mockUnitOfWork.Setup(u => u.AddAsync(It.IsAny<object>()))
+            _mockUnitOfWork.Setup(x => x.AddAsync(It.IsAny<object>()))
                 .ReturnsAsync(response);
 
             var controller = new GenericController<object>(_mockUnitOfWork.Object);
@@ -147,6 +153,7 @@ namespace Orders.Tests.Controllers
             var okResult = result as OkObjectResult;
             Assert.IsNotNull(okResult);
             Assert.AreEqual(_testModel, okResult.Value);
+            _mockUnitOfWork.Verify(x => x.AddAsync(It.IsAny<object>()), Times.Once());
         }
 
         [TestMethod]
@@ -154,7 +161,7 @@ namespace Orders.Tests.Controllers
         {
             // Arrange
             var response = new Response<object> { WasSuccess = false, Message = "Error" };
-            _mockUnitOfWork.Setup(u => u.AddAsync(It.IsAny<object>()))
+            _mockUnitOfWork.Setup(x => x.AddAsync(It.IsAny<object>()))
                 .ReturnsAsync(response);
 
             var controller = new GenericController<object>(_mockUnitOfWork.Object);
@@ -166,6 +173,7 @@ namespace Orders.Tests.Controllers
             var badRequestResult = result as BadRequestObjectResult;
             Assert.IsNotNull(badRequestResult);
             Assert.AreEqual("Error", badRequestResult.Value);
+            _mockUnitOfWork.Verify(x => x.AddAsync(It.IsAny<object>()), Times.Once());
         }
 
         [TestMethod]
@@ -173,7 +181,7 @@ namespace Orders.Tests.Controllers
         {
             // Arrange
             var response = new Response<object> { WasSuccess = true, Result = _testModel };
-            _mockUnitOfWork.Setup(u => u.UpdateAsync(It.IsAny<object>()))
+            _mockUnitOfWork.Setup(x => x.UpdateAsync(It.IsAny<object>()))
                 .ReturnsAsync(response);
 
             var controller = new GenericController<object>(_mockUnitOfWork.Object);
@@ -185,6 +193,7 @@ namespace Orders.Tests.Controllers
             var okResult = result as OkObjectResult;
             Assert.IsNotNull(okResult);
             Assert.AreEqual(_testModel, okResult.Value);
+            _mockUnitOfWork.Verify(x => x.UpdateAsync(It.IsAny<object>()), Times.Once());
         }
 
         [TestMethod]
@@ -192,7 +201,7 @@ namespace Orders.Tests.Controllers
         {
             // Arrange
             var response = new Response<object> { WasSuccess = false, Message = "Error" };
-            _mockUnitOfWork.Setup(u => u.UpdateAsync(It.IsAny<object>()))
+            _mockUnitOfWork.Setup(x => x.UpdateAsync(It.IsAny<object>()))
                 .ReturnsAsync(response);
 
             var controller = new GenericController<object>(_mockUnitOfWork.Object);
@@ -204,6 +213,7 @@ namespace Orders.Tests.Controllers
             var badRequestResult = result as BadRequestObjectResult;
             Assert.IsNotNull(badRequestResult);
             Assert.AreEqual("Error", badRequestResult.Value);
+            _mockUnitOfWork.Verify(x => x.UpdateAsync(It.IsAny<object>()), Times.Once());
         }
 
         [TestMethod]
@@ -211,9 +221,9 @@ namespace Orders.Tests.Controllers
         {
             // Arrange
             var response = new Response<object> { WasSuccess = true, Result = _testModel };
-            _mockUnitOfWork.Setup(u => u.GetAsync(It.IsAny<int>()))
+            _mockUnitOfWork.Setup(x => x.GetAsync(It.IsAny<int>()))
                 .ReturnsAsync(response);
-            _mockUnitOfWork.Setup(u => u.DeleteAsync(It.IsAny<int>()))
+            _mockUnitOfWork.Setup(x => x.DeleteAsync(It.IsAny<int>()))
                 .ReturnsAsync(response);
 
             var controller = new GenericController<object>(_mockUnitOfWork.Object);
@@ -223,6 +233,8 @@ namespace Orders.Tests.Controllers
 
             // Assert
             Assert.IsInstanceOfType(result, typeof(NoContentResult));
+            _mockUnitOfWork.Verify(x => x.GetAsync(It.IsAny<int>()), Times.Once());
+            _mockUnitOfWork.Verify(x => x.DeleteAsync(It.IsAny<int>()), Times.Once());
         }
 
         [TestMethod]
@@ -230,8 +242,8 @@ namespace Orders.Tests.Controllers
         {
             // Arrange
             var response = new Response<object> { WasSuccess = false };
-            _mockUnitOfWork.Setup(u => u.GetAsync(It.IsAny<int>()))
-                            .ReturnsAsync(response);
+            _mockUnitOfWork.Setup(x => x.GetAsync(It.IsAny<int>()))
+                .ReturnsAsync(response);
 
             var controller = new GenericController<object>(_mockUnitOfWork.Object);
 
@@ -240,6 +252,7 @@ namespace Orders.Tests.Controllers
 
             // Assert
             Assert.IsInstanceOfType(result, typeof(NotFoundResult));
+            _mockUnitOfWork.Verify(x => x.GetAsync(It.IsAny<int>()), Times.Once());
         }
 
         [TestMethod]
@@ -248,10 +261,10 @@ namespace Orders.Tests.Controllers
             // Arrange
             var responseTrue = new Response<object> { WasSuccess = true, Result = _testModel };
             var responseFalse = new Response<object> { WasSuccess = false, Message = "Error" };
-            _mockUnitOfWork.Setup(u => u.GetAsync(It.IsAny<int>()))
-                            .ReturnsAsync(responseTrue);
-            _mockUnitOfWork.Setup(u => u.DeleteAsync(It.IsAny<int>()))
-                            .ReturnsAsync(responseFalse);
+            _mockUnitOfWork.Setup(x => x.GetAsync(It.IsAny<int>()))
+                .ReturnsAsync(responseTrue);
+            _mockUnitOfWork.Setup(x => x.DeleteAsync(It.IsAny<int>()))
+                .ReturnsAsync(responseFalse);
 
             var controller = new GenericController<object>(_mockUnitOfWork.Object);
 
@@ -262,6 +275,8 @@ namespace Orders.Tests.Controllers
             var badRequestResult = result as BadRequestObjectResult;
             Assert.IsNotNull(badRequestResult);
             Assert.AreEqual("Error", badRequestResult.Value);
+            _mockUnitOfWork.Verify(x => x.GetAsync(It.IsAny<int>()), Times.Once());
+            _mockUnitOfWork.Verify(x => x.DeleteAsync(It.IsAny<int>()), Times.Once());
         }
     }
 }

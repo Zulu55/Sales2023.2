@@ -38,6 +38,7 @@ namespace Orders.Tests.Controllers
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
             var okResult = (OkObjectResult)result;
             Assert.AreEqual(states, okResult.Value);
+            _mockStatesUnitOfWork.Verify(x => x.GetComboAsync(countryId), Times.Once());
         }
 
         [TestMethod]
@@ -60,6 +61,7 @@ namespace Orders.Tests.Controllers
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
             var okResult = (OkObjectResult)result;
             Assert.AreEqual(states, okResult.Value);
+            _mockStatesUnitOfWork.Verify(x => x.GetAsync(pagination), Times.Once());
         }
 
         [TestMethod]
@@ -75,6 +77,7 @@ namespace Orders.Tests.Controllers
 
             // Assert
             Assert.IsInstanceOfType(result, typeof(BadRequestResult));
+            _mockStatesUnitOfWork.Verify(x => x.GetAsync(pagination), Times.Once());
         }
 
         [TestMethod]
@@ -97,6 +100,7 @@ namespace Orders.Tests.Controllers
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
             var okResult = (OkObjectResult)result;
             Assert.AreEqual(totalPages, okResult.Value);
+            _mockStatesUnitOfWork.Verify(x => x.GetTotalPagesAsync(pagination), Times.Once());
         }
 
         [TestMethod]
@@ -112,6 +116,7 @@ namespace Orders.Tests.Controllers
 
             // Assert
             Assert.IsInstanceOfType(result, typeof(BadRequestResult));
+            _mockStatesUnitOfWork.Verify(x => x.GetTotalPagesAsync(pagination), Times.Once());
         }
 
         [TestMethod]
@@ -134,6 +139,7 @@ namespace Orders.Tests.Controllers
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
             var okResult = (OkObjectResult)result;
             Assert.AreEqual(state, okResult.Value);
+            _mockStatesUnitOfWork.Verify(x => x.GetAsync(stateId), Times.Once());
         }
 
         [TestMethod]
@@ -156,6 +162,7 @@ namespace Orders.Tests.Controllers
             Assert.IsInstanceOfType(result, typeof(NotFoundObjectResult));
             var notFoundResult = (NotFoundObjectResult)result;
             Assert.AreEqual(message, notFoundResult.Value);
+            _mockStatesUnitOfWork.Verify(x => x.GetAsync(stateId), Times.Once());
         }
     }
 }

@@ -29,7 +29,7 @@ namespace Orders.Tests.UnitsOfWork
             var email = "test@example.com";
             var paginationDTO = new PaginationDTO();
             var response = new Response<IEnumerable<Order>> { WasSuccess = true };
-            _mockOrdersRepository.Setup(repo => repo.GetAsync(email, paginationDTO))
+            _mockOrdersRepository.Setup(x => x.GetAsync(email, paginationDTO))
                 .ReturnsAsync(response);
 
             // Act
@@ -46,7 +46,7 @@ namespace Orders.Tests.UnitsOfWork
             var email = "test@example.com";
             var paginationDTO = new PaginationDTO();
             var response = new Response<int> { WasSuccess = true };
-            _mockOrdersRepository.Setup(repo => repo.GetTotalPagesAsync(email, paginationDTO))
+            _mockOrdersRepository.Setup(x => x.GetTotalPagesAsync(email, paginationDTO))
                 .ReturnsAsync(response);
 
             // Act
@@ -63,7 +63,7 @@ namespace Orders.Tests.UnitsOfWork
             // Arrange
             var orderId = 1;
             var response = new Response<Order> { WasSuccess = true };
-            _mockOrdersRepository.Setup(repo => repo.GetAsync(orderId))
+            _mockOrdersRepository.Setup(x => x.GetAsync(orderId))
                 .ReturnsAsync(response);
 
             // Act
@@ -81,7 +81,7 @@ namespace Orders.Tests.UnitsOfWork
             var email = "test@example.com";
             var orderDTO = new OrderDTO();
             var response = new Response<Order> { WasSuccess = true };
-            _mockOrdersRepository.Setup(repo => repo.UpdateFullAsync(email, orderDTO))
+            _mockOrdersRepository.Setup(x => x.UpdateFullAsync(email, orderDTO))
                 .ReturnsAsync(response);
 
             // Act

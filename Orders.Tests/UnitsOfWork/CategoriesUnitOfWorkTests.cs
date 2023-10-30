@@ -28,14 +28,14 @@ namespace Orders.Tests.UnitsOfWork
             // Arrange
             var pagination = new PaginationDTO();
             var expectedResponse = new Response<IEnumerable<Category>> { Result = new List<Category>() };
-            _mockCategoriesRepository.Setup(repo => repo.GetAsync(pagination)).ReturnsAsync(expectedResponse);
+            _mockCategoriesRepository.Setup(x => x.GetAsync(pagination)).ReturnsAsync(expectedResponse);
 
             // Act
             var result = await _unitOfWork.GetAsync(pagination);
 
             // Assert
             Assert.AreEqual(expectedResponse, result);
-            _mockCategoriesRepository.Verify(repo => repo.GetAsync(pagination), Times.Once);
+            _mockCategoriesRepository.Verify(x => x.GetAsync(pagination), Times.Once);
         }
 
         [TestMethod]
@@ -43,14 +43,14 @@ namespace Orders.Tests.UnitsOfWork
         {
             // Arrange
             var expectedCategories = new List<Category> { new Category() };
-            _mockCategoriesRepository.Setup(repo => repo.GetComboAsync()).ReturnsAsync(expectedCategories);
+            _mockCategoriesRepository.Setup(x => x.GetComboAsync()).ReturnsAsync(expectedCategories);
 
             // Act
             var result = await _unitOfWork.GetComboAsync();
 
             // Assert
             Assert.AreEqual(expectedCategories, result);
-            _mockCategoriesRepository.Verify(repo => repo.GetComboAsync(), Times.Once);
+            _mockCategoriesRepository.Verify(x => x.GetComboAsync(), Times.Once);
         }
 
         [TestMethod]
@@ -59,14 +59,14 @@ namespace Orders.Tests.UnitsOfWork
             // Arrange
             var pagination = new PaginationDTO();
             var expectedResponse = new Response<int> { Result = 5 };
-            _mockCategoriesRepository.Setup(repo => repo.GetTotalPagesAsync(pagination)).ReturnsAsync(expectedResponse);
+            _mockCategoriesRepository.Setup(x => x.GetTotalPagesAsync(pagination)).ReturnsAsync(expectedResponse);
 
             // Act
             var result = await _unitOfWork.GetTotalPagesAsync(pagination);
 
             // Assert
             Assert.AreEqual(expectedResponse, result);
-            _mockCategoriesRepository.Verify(repo => repo.GetTotalPagesAsync(pagination), Times.Once);
+            _mockCategoriesRepository.Verify(x => x.GetTotalPagesAsync(pagination), Times.Once);
         }
     }
 }

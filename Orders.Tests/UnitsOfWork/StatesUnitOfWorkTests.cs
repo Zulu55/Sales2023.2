@@ -28,7 +28,7 @@ namespace Orders.Tests.UnitsOfWork
             // Arrange
             var pagination = new PaginationDTO();
             var states = new List<State> { new State(), new State() };
-            _mockStatesRepository.Setup(r => r.GetAsync(pagination))
+            _mockStatesRepository.Setup(x => x.GetAsync(pagination))
                 .ReturnsAsync(new Response<IEnumerable<State>>
                 {
                     WasSuccess = true,
@@ -41,6 +41,7 @@ namespace Orders.Tests.UnitsOfWork
             // Assert
             Assert.IsTrue(result.WasSuccess);
             Assert.AreEqual(states, result.Result);
+            _mockStatesRepository.Verify(x => x.GetAsync(pagination), Times.Once());
         }
 
         [TestMethod]
@@ -49,7 +50,7 @@ namespace Orders.Tests.UnitsOfWork
             // Arrange
             var pagination = new PaginationDTO();
             var totalPages = 5;
-            _mockStatesRepository.Setup(r => r.GetTotalPagesAsync(pagination))
+            _mockStatesRepository.Setup(x => x.GetTotalPagesAsync(pagination))
                 .ReturnsAsync(new Response<int>
                 {
                     WasSuccess = true,
@@ -62,6 +63,7 @@ namespace Orders.Tests.UnitsOfWork
             // Assert
             Assert.IsTrue(result.WasSuccess);
             Assert.AreEqual(totalPages, result.Result);
+            _mockStatesRepository.Verify(x => x.GetTotalPagesAsync(pagination), Times.Once());
         }
 
         [TestMethod]
@@ -70,7 +72,7 @@ namespace Orders.Tests.UnitsOfWork
             // Arrange
             var stateId = 1;
             var state = new State();
-            _mockStatesRepository.Setup(r => r.GetAsync(stateId))
+            _mockStatesRepository.Setup(x => x.GetAsync(stateId))
                 .ReturnsAsync(new Response<State>
                 {
                     WasSuccess = true,
@@ -83,6 +85,7 @@ namespace Orders.Tests.UnitsOfWork
             // Assert
             Assert.IsTrue(result.WasSuccess);
             Assert.AreEqual(state, result.Result);
+            _mockStatesRepository.Verify(x => x.GetAsync(stateId), Times.Once());
         }
 
         [TestMethod]
@@ -91,7 +94,7 @@ namespace Orders.Tests.UnitsOfWork
             // Arrange
             var countryId = 1;
             var states = new List<State> { new State(), new State() };
-            _mockStatesRepository.Setup(r => r.GetComboAsync(countryId))
+            _mockStatesRepository.Setup(x => x.GetComboAsync(countryId))
                 .ReturnsAsync(states);
 
             // Act
@@ -99,6 +102,7 @@ namespace Orders.Tests.UnitsOfWork
 
             // Assert
             Assert.AreEqual(states, result);
+            _mockStatesRepository.Verify(x => x.GetComboAsync(countryId), Times.Once());
         }
     }
 }

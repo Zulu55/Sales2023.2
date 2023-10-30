@@ -28,7 +28,7 @@ namespace Orders.Tests.UnitsOfWork
         [TestMethod]
         public async Task AddAsync_Success()
         {
-            _mockRepository.Setup(r => r.AddAsync(It.IsAny<object>()))
+            _mockRepository.Setup(x => x.AddAsync(It.IsAny<object>()))
                 .ReturnsAsync(new Response<object> { Result = _testModel });
 
             var result = await _unitOfWork.AddAsync(_testModel);
@@ -40,7 +40,7 @@ namespace Orders.Tests.UnitsOfWork
         [TestMethod]
         public async Task DeleteAsync_Success()
         {
-            _mockRepository.Setup(r => r.DeleteAsync(It.IsAny<int>()))
+            _mockRepository.Setup(x => x.DeleteAsync(It.IsAny<int>()))
                 .ReturnsAsync(new Response<object> { Result = _testModel });
 
             var result = await _unitOfWork.DeleteAsync(_testId);
@@ -52,7 +52,7 @@ namespace Orders.Tests.UnitsOfWork
         [TestMethod]
         public async Task GetAsync_Pagination_Success()
         {
-            _mockRepository.Setup(r => r.GetAsync(It.IsAny<PaginationDTO>()))
+            _mockRepository.Setup(x => x.GetAsync(It.IsAny<PaginationDTO>()))
                 .ReturnsAsync(new Response<IEnumerable<object>> { Result = new List<object> { _testModel } });
 
             var result = await _unitOfWork.GetAsync(_paginationDTO);
@@ -64,7 +64,7 @@ namespace Orders.Tests.UnitsOfWork
         [TestMethod]
         public async Task GetTotalPagesAsync_Success()
         {
-            _mockRepository.Setup(r => r.GetTotalPagesAsync(It.IsAny<PaginationDTO>()))
+            _mockRepository.Setup(x => x.GetTotalPagesAsync(It.IsAny<PaginationDTO>()))
                 .ReturnsAsync(new Response<int> { Result = 5 });
 
             var result = await _unitOfWork.GetTotalPagesAsync(_paginationDTO);
@@ -76,7 +76,7 @@ namespace Orders.Tests.UnitsOfWork
         [TestMethod]
         public async Task GetAsync_Id_Success()
         {
-            _mockRepository.Setup(r => r.GetAsync(It.IsAny<int>()))
+            _mockRepository.Setup(x => x.GetAsync(It.IsAny<int>()))
                 .ReturnsAsync(new Response<object> { Result = _testModel });
 
             var result = await _unitOfWork.GetAsync(_testId);
@@ -88,7 +88,7 @@ namespace Orders.Tests.UnitsOfWork
         [TestMethod]
         public async Task UpdateAsync_Success()
         {
-            _mockRepository.Setup(r => r.UpdateAsync(It.IsAny<object>()))
+            _mockRepository.Setup(x => x.UpdateAsync(It.IsAny<object>()))
                 .ReturnsAsync(new Response<object> { Result = _testModel });
 
             var result = await _unitOfWork.UpdateAsync(_testModel);

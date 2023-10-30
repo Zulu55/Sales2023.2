@@ -28,13 +28,15 @@ namespace Orders.Tests.UnitsOfWork
             // Arrange
             var pagination = new PaginationDTO();
             var expectedResponse = new Response<IEnumerable<Country>> { WasSuccess = true };
-            _mockCountriesRepository.Setup(repo => repo.GetAsync(pagination)).ReturnsAsync(expectedResponse);
+            _mockCountriesRepository.Setup(x => x.GetAsync(pagination))
+                .ReturnsAsync(expectedResponse);
 
             // Act
             var result = await _unitOfWork.GetAsync(pagination);
 
             // Assert
             Assert.AreEqual(expectedResponse, result);
+            _mockCountriesRepository.Verify(x => x.GetAsync(pagination), Times.Once);
         }
 
         [TestMethod]
@@ -43,13 +45,15 @@ namespace Orders.Tests.UnitsOfWork
             // Arrange
             var pagination = new PaginationDTO();
             var expectedResponse = new Response<int> { WasSuccess = true };
-            _mockCountriesRepository.Setup(repo => repo.GetTotalPagesAsync(pagination)).ReturnsAsync(expectedResponse);
+            _mockCountriesRepository.Setup(x => x.GetTotalPagesAsync(pagination))
+                .ReturnsAsync(expectedResponse);
 
             // Act
             var result = await _unitOfWork.GetTotalPagesAsync(pagination);
 
             // Assert
             Assert.AreEqual(expectedResponse, result);
+            _mockCountriesRepository.Verify(x => x.GetTotalPagesAsync(pagination), Times.Once);
         }
 
         [TestMethod]
@@ -58,13 +62,15 @@ namespace Orders.Tests.UnitsOfWork
             // Arrange
             int id = 1;
             var expectedResponse = new Response<Country> { WasSuccess = true };
-            _mockCountriesRepository.Setup(repo => repo.GetAsync(id)).ReturnsAsync(expectedResponse);
+            _mockCountriesRepository.Setup(x => x.GetAsync(id))
+                .ReturnsAsync(expectedResponse);
 
             // Act
             var result = await _unitOfWork.GetAsync(id);
 
             // Assert
             Assert.AreEqual(expectedResponse, result);
+            _mockCountriesRepository.Verify(x => x.GetAsync(id), Times.Once);
         }
 
         [TestMethod]
@@ -72,13 +78,15 @@ namespace Orders.Tests.UnitsOfWork
         {
             // Arrange
             var expectedCountries = new List<Country> { new Country { Id = 1, Name = "Country1" } };
-            _mockCountriesRepository.Setup(repo => repo.GetComboAsync()).ReturnsAsync(expectedCountries);
+            _mockCountriesRepository.Setup(x => x.GetComboAsync())
+                .ReturnsAsync(expectedCountries);
 
             // Act
             var result = await _unitOfWork.GetComboAsync();
 
             // Assert
             CollectionAssert.AreEqual(expectedCountries, new List<Country>(result));
+            _mockCountriesRepository.Verify(x => x.GetComboAsync(), Times.Once);
         }
     }
 }

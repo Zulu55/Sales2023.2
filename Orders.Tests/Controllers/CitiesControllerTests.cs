@@ -29,7 +29,7 @@ namespace Orders.Tests.Controllers
             // Arrange
             var stateId = 1;
             var cities = new List<City> { new City { Id = 1, Name = "City1" }, new City { Id = 2, Name = "City2" } };
-            _mockCitiesUnitOfWork.Setup(uow => uow.GetComboAsync(stateId)).ReturnsAsync(cities);
+            _mockCitiesUnitOfWork.Setup(x => x.GetComboAsync(stateId)).ReturnsAsync(cities);
 
             // Act
             var result = await _controller.GetComboAsync(stateId);
@@ -40,6 +40,8 @@ namespace Orders.Tests.Controllers
             var resultValue = okResult.Value as IEnumerable<City>;
             Assert.IsNotNull(resultValue);
             Assert.AreEqual(2, resultValue.Count());
+            new List<City> { new City { Id = 1, Name = "City1" }, new City { Id = 2, Name = "City2" } };
+            _mockCitiesUnitOfWork.Verify(x => x.GetComboAsync(stateId), Times.Once());
         }
 
         [TestMethod]
@@ -48,7 +50,7 @@ namespace Orders.Tests.Controllers
             // Arrange
             var pagination = new PaginationDTO();
             var response = new Response<IEnumerable<City>> { WasSuccess = true, Result = new List<City>() };
-            _mockCitiesUnitOfWork.Setup(uow => uow.GetAsync(pagination)).ReturnsAsync(response);
+            _mockCitiesUnitOfWork.Setup(x => x.GetAsync(pagination)).ReturnsAsync(response);
 
             // Act
             var result = await _controller.GetAsync(pagination);
@@ -56,6 +58,7 @@ namespace Orders.Tests.Controllers
             // Assert
             var okResult = result as OkObjectResult;
             Assert.IsNotNull(okResult);
+            _mockCitiesUnitOfWork.Verify(x => x.GetAsync(pagination), Times.Once());
         }
 
         [TestMethod]
@@ -64,7 +67,7 @@ namespace Orders.Tests.Controllers
             // Arrange
             var pagination = new PaginationDTO();
             var response = new Response<IEnumerable<City>> { WasSuccess = false };
-            _mockCitiesUnitOfWork.Setup(uow => uow.GetAsync(pagination)).ReturnsAsync(response);
+            _mockCitiesUnitOfWork.Setup(x => x.GetAsync(pagination)).ReturnsAsync(response);
 
             // Act
             var result = await _controller.GetAsync(pagination);
@@ -72,6 +75,7 @@ namespace Orders.Tests.Controllers
             // Assert
             var badRequestResult = result as BadRequestResult;
             Assert.IsNotNull(badRequestResult);
+            _mockCitiesUnitOfWork.Verify(x => x.GetAsync(pagination), Times.Once());
         }
 
         [TestMethod]
@@ -80,7 +84,7 @@ namespace Orders.Tests.Controllers
             // Arrange
             var pagination = new PaginationDTO();
             var response = new Response<int> { WasSuccess = true, Result = 1 };
-            _mockCitiesUnitOfWork.Setup(uow => uow.GetTotalPagesAsync(pagination)).ReturnsAsync(response);
+            _mockCitiesUnitOfWork.Setup(x => x.GetTotalPagesAsync(pagination)).ReturnsAsync(response);
 
             // Act
             var result = await _controller.GetPagesAsync(pagination);
@@ -89,6 +93,7 @@ namespace Orders.Tests.Controllers
             var okResult = result as OkObjectResult;
             Assert.IsNotNull(okResult);
             Assert.AreEqual(1, okResult.Value);
+            _mockCitiesUnitOfWork.Verify(x => x.GetTotalPagesAsync(pagination), Times.Once());
         }
 
         [TestMethod]
@@ -97,7 +102,7 @@ namespace Orders.Tests.Controllers
             // Arrange
             var pagination = new PaginationDTO();
             var response = new Response<int> { WasSuccess = false };
-            _mockCitiesUnitOfWork.Setup(uow => uow.GetTotalPagesAsync(pagination)).ReturnsAsync(response);
+            _mockCitiesUnitOfWork.Setup(x => x.GetTotalPagesAsync(pagination)).ReturnsAsync(response);
 
             // Act
             var result = await _controller.GetPagesAsync(pagination);
@@ -105,6 +110,7 @@ namespace Orders.Tests.Controllers
             // Assert
             var badRequestResult = result as BadRequestResult;
             Assert.IsNotNull(badRequestResult);
+            _mockCitiesUnitOfWork.Verify(x => x.GetTotalPagesAsync(pagination), Times.Once());
         }
     }
 }
