@@ -9,16 +9,21 @@ namespace Orders.Frontend.Pages
 {
     public partial class Index
     {
+        private int currentPage = 1;
+        private int totalPages;
+        private int counter = 0;
+        private bool isAuthenticated;
+        private string allCategories = "all_categories_list";
+
         [Inject] private IRepository repository { get; set; } = null!;
 
         [Inject] private SweetAlertService sweetAlertService { get; set; } = null!;
 
         [Inject] private NavigationManager navigationManager { get; set; } = null!;
 
-        private int currentPage = 1;
-        private int totalPages;
-
         public List<Product>? Products { get; set; }
+        public List<Category>? Categories { get; set; }
+        public string CategoryFilter { get; set; } = string.Empty;
 
         [CascadingParameter]
         private Task<AuthenticationState> authenticationStateTask { get; set; } = null!;
@@ -26,9 +31,6 @@ namespace Orders.Frontend.Pages
         [Parameter]
         [SupplyParameterFromQuery]
         public string Page { get; set; } = "";
-
-        private int counter = 0;
-        private bool isAuthenticated;
 
         [Parameter]
         [SupplyParameterFromQuery]
@@ -43,6 +45,19 @@ namespace Orders.Frontend.Pages
         {
             await CheckIsAuthenticatedAsync();
             await LoadCounterAsync();
+            await LoadCategoriesAsync();
+        }
+
+        private async Task LoadCategoriesAsync()
+        {
+            var response = await repository.GetAsync<List<Category>>("api/categories/combo");
+            if (response.Error)
+            {
+                var message = await response.GetErrorMessageAsync();
+                await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+            }
+
+            Categories = response.Response;
         }
 
         private async Task CheckIsAuthenticatedAsync()
@@ -69,11 +84,23 @@ namespace Orders.Frontend.Pages
         private async Task SelectedPageAsync(int page)
         {
             currentPage = page;
-            await LoadAsync(page);
+            await LoadAsync(page, CategoryFilter);
         }
 
-        private async Task LoadAsync(int page = 1)
+        private async Task LoadAsync(int page = 1, string category = "")
         {
+            if (!string.IsNullOrWhiteSpace(category))
+            {
+                if (category == allCategories)
+                {
+                    CategoryFilter = string.Empty;
+                }
+                else
+                {
+                    CategoryFilter = category;
+                }
+            }
+
             if (!string.IsNullOrWhiteSpace(Page))
             {
                 page = Convert.ToInt32(Page);
@@ -93,6 +120,10 @@ namespace Orders.Frontend.Pages
             {
                 url += $"&filter={Filter}";
             }
+            if (!string.IsNullOrEmpty(CategoryFilter))
+            {
+                url += $"&CategoryFilter={CategoryFilter}";
+            }
 
             var response = await repository.GetAsync<List<Product>>(url);
             if (response.Error)
@@ -111,6 +142,10 @@ namespace Orders.Frontend.Pages
             if (string.IsNullOrEmpty(Filter))
             {
                 url += $"&filter={Filter}";
+            }
+            if (!string.IsNullOrEmpty(CategoryFilter))
+            {
+                url += $"&CategoryFilter={CategoryFilter}";
             }
 
             var response = await repository.GetAsync<int>(url);
