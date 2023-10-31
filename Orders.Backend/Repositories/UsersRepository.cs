@@ -68,6 +68,8 @@ namespace Orders.Backend.Repositories
         {
             var queryable = _context.Users
                 .Include(u => u.City)
+                .ThenInclude(c => c!.State)
+                .ThenInclude(s => s!.Country)
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(pagination.Filter))

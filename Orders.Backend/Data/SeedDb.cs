@@ -26,7 +26,8 @@ namespace Orders.Backend.Data
         public async Task SeedAsync()
         {
             await _context.Database.EnsureCreatedAsync();
-            await CheckCountriesAsync();
+            //await CheckCountriesAsync();
+            await CheckCountriesAsync2();
             await CheckCategoriesAsync();
             await CheckRolesAsync();
             await CheckUserAsync("1010", "Juan", "Zuluaga", "zulu@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "JuanZuluaga.jpeg", UserType.Admin);
@@ -35,6 +36,32 @@ namespace Orders.Backend.Data
             await CheckUserAsync("4040", "Angelina", "Jolie", "angelina@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "Angelina.jpg", UserType.User);
             await CheckUserAsync("5050", "Bob", "Marley", "bob@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "bob.jpg", UserType.User);
             await CheckProductsAsync();
+        }
+
+        private async Task CheckCountriesAsync2()
+        {
+            if (!_context.Countries.Any())
+            {
+                _context.Countries.Add(new Country
+                {
+                    Name = "Colombia",
+                    States = new List<State>
+                    {
+                        new State
+                        {
+                            Name = "Antioquia",
+                            Cities = new List<City>
+                            {
+                                new City
+                                {
+                                    Name = "Medellín"
+                                }
+                            }
+                        }
+                    }
+                });
+                await _context.SaveChangesAsync();
+            }
         }
 
         private async Task CheckProductsAsync()

@@ -23,13 +23,12 @@ namespace Orders.Frontend.Pages.Products
         };
 
         private ProductForm? productForm;
-        private List<Category> selectedCategories = new();
         private List<Category> nonSelectedCategories = new();
         private bool loading = true;
 
         protected override async Task OnInitializedAsync()
         {
-            var httpResponse = await repository.GetAsync<List<Category>>("/api/categories/comboDD");
+            var httpResponse = await repository.GetAsync<List<Category>>("/api/categories/combo");
             loading = false;
 
             if (httpResponse.Error)
