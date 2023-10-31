@@ -103,7 +103,7 @@ namespace Orders.Backend.Controllers
         }
 
         [HttpPost("Login")]
-        public async Task<IActionResult> Login([FromBody] LoginDTO model)
+        public async Task<IActionResult> LoginAsync([FromBody] LoginDTO model)
         {
             var result = await _userHelper.LoginAsync(model);
             if (result.Succeeded)
@@ -127,7 +127,7 @@ namespace Orders.Backend.Controllers
 
         [HttpPut]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> Put(User user)
+        public async Task<IActionResult> PutAsync(User user)
         {
             try
             {
@@ -166,7 +166,7 @@ namespace Orders.Backend.Controllers
         }
 
         [HttpPost("RecoverPassword")]
-        public async Task<IActionResult> RecoverPassword([FromBody] EmailDTO model)
+        public async Task<IActionResult> RecoverPasswordAsync([FromBody] EmailDTO model)
         {
             var user = await _userHelper.GetUserAsync(model.Email);
             if (user == null)
@@ -196,7 +196,7 @@ namespace Orders.Backend.Controllers
         }
 
         [HttpPost("ResetPassword")]
-        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO model)
+        public async Task<IActionResult> ResetPasswordAsync([FromBody] ResetPasswordDTO model)
         {
             var user = await _userHelper.GetUserAsync(model.Email);
             if (user == null)
@@ -215,7 +215,7 @@ namespace Orders.Backend.Controllers
 
         [HttpGet]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAsync()
         {
             return Ok(await _userHelper.GetUserAsync(User.Identity!.Name!));
         }
@@ -245,7 +245,7 @@ namespace Orders.Backend.Controllers
         }
 
         [HttpPost("ResedToken")]
-        public async Task<IActionResult> ResedToken([FromBody] EmailDTO model)
+        public async Task<IActionResult> ResedTokenAsync([FromBody] EmailDTO model)
         {
             User user = await _userHelper.GetUserAsync(model.Email);
             if (user == null)
