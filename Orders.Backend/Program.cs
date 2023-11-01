@@ -12,6 +12,7 @@ using Orders.Backend.Repositories;
 using Orders.Backend.Services;
 using Orders.Backend.UnitsOfWork;
 using Orders.Shared.Entites;
+using Microsoft.Extensions.Azure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -113,6 +114,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["jwtKey"]!)),
         ClockSkew = TimeSpan.Zero
     });
+builder.Services.AddAzureClients(clientBuilder =>
+{
+    clientBuilder.AddBlobServiceClient(builder.Configuration["ConnectionStrings:AzureStorage:blob"], preferMsi: true);
+    clientBuilder.AddQueueServiceClient(builder.Configuration["ConnectionStrings:AzureStorage:queue"], preferMsi: true);
+});
 
 var app = builder.Build();
 SeedData(app);

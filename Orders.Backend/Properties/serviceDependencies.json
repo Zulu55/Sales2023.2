@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:LocalConnection",
+      "dynamicId": null
+    },
+    "mssql2": {
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:DockerConnection",
+      "dynamicId": null
+    },
+    "storage1": {
+      "type": "storage",
+      "connectionId": "ConnectionStrings:AzureStorage",
+      "dynamicId": null
+    }
+  }
+}
