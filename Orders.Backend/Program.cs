@@ -59,6 +59,7 @@ builder.Services.AddScoped<IMailHelper, MailHelper>();
 builder.Services.AddScoped<ISmtpClient, SmtpClientWrapper>();
 builder.Services.AddScoped<HttpClient>();
 builder.Services.AddScoped<IBlobContainerClientFactory, BlobContainerClientFactory>();
+builder.Services.AddScoped<IRuntimeInformationWrapper, RuntimeInformationWrapper>();
 
 builder.Services.AddScoped(typeof(IGenericUnitOfWork<>), typeof(GenericUnitOfWork<>));
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));

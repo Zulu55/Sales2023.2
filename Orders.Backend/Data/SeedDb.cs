@@ -14,19 +14,21 @@ namespace Orders.Backend.Data
         private readonly IApiService _apiService;
         private readonly IUserHelper _userHelper;
         private readonly IFileStorage _fileStorage;
+        private readonly IRuntimeInformationWrapper _runtimeInformationWrapper;
 
-        public SeedDb(DataContext context, IApiService apiService, IUserHelper userHelper, IFileStorage fileStorage)
+        public SeedDb(DataContext context, IApiService apiService, IUserHelper userHelper, IFileStorage fileStorage, IRuntimeInformationWrapper runtimeInformationWrapper)
         {
             _context = context;
             _apiService = apiService;
             _userHelper = userHelper;
             _fileStorage = fileStorage;
+            _runtimeInformationWrapper = runtimeInformationWrapper;
         }
 
         public async Task SeedAsync()
         {
             await _context.Database.EnsureCreatedAsync();
-            //await CheckCountriesAsync();
+            await CheckCountriesAsync();
             await CheckCountriesAsync2();
             await CheckCategoriesAsync();
             await CheckRolesAsync();
@@ -120,7 +122,7 @@ namespace Orders.Backend.Data
             foreach (string? image in images)
             {
                 string filePath;
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                if (_runtimeInformationWrapper.IsOSPlatform(OSPlatform.Windows))
                 {
                     filePath = $"{Environment.CurrentDirectory}\\Images\\products\\{image}";
                 }
@@ -148,7 +150,7 @@ namespace Orders.Backend.Data
                 }
 
                 string filePath;
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                if (_runtimeInformationWrapper.IsOSPlatform(OSPlatform.Windows))
                 {
                     filePath = $"{Environment.CurrentDirectory}\\Images\\users\\{image}";
                 }

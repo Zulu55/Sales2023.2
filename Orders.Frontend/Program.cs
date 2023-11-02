@@ -14,8 +14,8 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 // TODO: To change enviroments
-var urlBack = "{Your URL}";
-//var urlBack = "https://localhost:7072/";
+//var urlBack = "{Your URL}";
+var urlBack = "https://localhost:7072/";
 
 builder.Services.AddSingleton(sp => new HttpClient { BaseAddress = new Uri(urlBack) });
 builder.Services.AddScoped<IRepository, Repository>();
