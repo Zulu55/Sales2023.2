@@ -13,11 +13,11 @@ namespace Orders.Shared.Entites
 
         public int CountryId { get; set; }
 
-        public Country? Country { get; set; }
+        public Country Country { get; set; } = null!;
 
         public ICollection<City>? Cities { get; set; }
 
         [Display(Name = "Ciudades")]
-        public int CitiesNumber => Cities == null ? 0 : Cities.Count;
+        public int CitiesNumber => Cities == null || Cities.Count == 0 ? 0 : Cities.Count;
     }
 }

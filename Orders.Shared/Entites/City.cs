@@ -13,7 +13,7 @@ namespace Orders.Shared.Entites
 
         public int StateId { get; set; }
 
-        public State? State { get; set; }
+        public State State { get; set; } = null!;
 
         public ICollection<User>? Users { get; set; }
     }

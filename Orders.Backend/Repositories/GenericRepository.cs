@@ -42,7 +42,16 @@ namespace Orders.Backend.Repositories
         public virtual async Task<Response<T>> DeleteAsync(int id)
         {
             var row = await _entity.FindAsync(id);
-            if (row != null)
+            if (row == null)
+            {
+                return new Response<T>
+                {
+                    WasSuccess = false,
+                    Message = "Registro no encontrado"
+                };
+            }
+
+            try
             {
                 _entity.Remove(row);
                 await _context.SaveChangesAsync();
@@ -51,11 +60,14 @@ namespace Orders.Backend.Repositories
                     WasSuccess = true,
                 };
             }
-            return new Response<T>
+            catch
             {
-                WasSuccess = false,
-                Message = "Registro no encontrado"
-            };
+                return new Response<T>
+                {
+                    WasSuccess = false,
+                    Message = "No se puede borrar, porque tiene registros relacionados"
+                };
+            }
         }
 
         public virtual async Task<Response<T>> GetAsync(int id)

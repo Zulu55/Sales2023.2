@@ -173,7 +173,7 @@ namespace Orders.Backend.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("Orders.Shared.Entites.City", b =>
@@ -197,7 +197,7 @@ namespace Orders.Backend.Migrations
                     b.HasIndex("StateId", "Name")
                         .IsUnique();
 
-                    b.ToTable("Cities");
+                    b.ToTable("Cities", (string)null);
                 });
 
             modelBuilder.Entity("Orders.Shared.Entites.Country", b =>
@@ -218,7 +218,7 @@ namespace Orders.Backend.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Countries");
+                    b.ToTable("Countries", (string)null);
                 });
 
             modelBuilder.Entity("Orders.Shared.Entites.Order", b =>
@@ -245,7 +245,7 @@ namespace Orders.Backend.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("Orders.Shared.Entites.OrderDetail", b =>
@@ -274,7 +274,7 @@ namespace Orders.Backend.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderDetails");
+                    b.ToTable("OrderDetails", (string)null);
                 });
 
             modelBuilder.Entity("Orders.Shared.Entites.Product", b =>
@@ -306,7 +306,7 @@ namespace Orders.Backend.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("Orders.Shared.Entites.ProductCategory", b =>
@@ -329,7 +329,7 @@ namespace Orders.Backend.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductCategories");
+                    b.ToTable("ProductCategories", (string)null);
                 });
 
             modelBuilder.Entity("Orders.Shared.Entites.ProductImage", b =>
@@ -351,7 +351,7 @@ namespace Orders.Backend.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductImages");
+                    b.ToTable("ProductImages", (string)null);
                 });
 
             modelBuilder.Entity("Orders.Shared.Entites.State", b =>
@@ -375,7 +375,7 @@ namespace Orders.Backend.Migrations
                     b.HasIndex("CountryId", "Name")
                         .IsUnique();
 
-                    b.ToTable("States");
+                    b.ToTable("States", (string)null);
                 });
 
             modelBuilder.Entity("Orders.Shared.Entites.TemporalOrder", b =>
@@ -404,7 +404,7 @@ namespace Orders.Backend.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("TemporalOrders");
+                    b.ToTable("TemporalOrders", (string)null);
                 });
 
             modelBuilder.Entity("Orders.Shared.Entites.User", b =>

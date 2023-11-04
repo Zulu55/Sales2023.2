@@ -6,7 +6,7 @@ namespace Orders.Shared.Entites
     {
         public int Id { get; set; }
 
-        public Order? Order { get; set; }
+        public Order Order { get; set; } = null!;
 
         public int OrderId { get; set; }
 
@@ -14,7 +14,7 @@ namespace Orders.Shared.Entites
         [Display(Name = "Comentarios")]
         public string? Remarks { get; set; }
 
-        public Product? Product { get; set; }
+        public Product Product { get; set; } = null!;
 
         public int ProductId { get; set; }
 

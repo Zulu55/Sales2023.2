@@ -14,6 +14,6 @@ namespace Orders.Shared.Entites
         public ICollection<ProductCategory>? ProductCategories { get; set; }
 
         [Display(Name = "Productos")]
-        public int ProductCategoriesNumber => ProductCategories == null ? 0 : ProductCategories.Count;
+        public int ProductCategoriesNumber => ProductCategories == null || ProductCategories.Count == 0 ? 0 : ProductCategories.Count;
     }
 }
