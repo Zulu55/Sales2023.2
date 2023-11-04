@@ -27,9 +27,9 @@ namespace Orders.Tests.Repositories
                 new State { Id = 1, Name = "State1", CountryId = 1 },
                 new State { Id = 2, Name = "State2", CountryId = 1 });
             _context.Cities.AddRange(
-                new City { Id = 1, Name = "City1", StateId = 1 },
+                new City { Id = 1, Name = "City1", StateId = 1, Users = new List<User>() },
                 new City { Id = 2, Name = "City2", StateId = 1 },
-                new City { Id = 3, Name = "City3", StateId = 2 }
+                new City { Id = 3, Name = "City3", State = _context.States.LastOrDefault() }
             );
             _context.SaveChanges();
         }
@@ -61,6 +61,7 @@ namespace Orders.Tests.Repositories
             Assert.IsTrue(response.WasSuccess);
             Assert.AreEqual(1, response.Result!.Count());
             Assert.AreEqual("City1", response.Result!.First().Name);
+            Assert.AreEqual(0, response.Result!.First().Users!.Count);
         }
 
         [TestMethod]

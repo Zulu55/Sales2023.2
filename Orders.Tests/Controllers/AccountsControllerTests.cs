@@ -159,7 +159,22 @@ namespace Orders.Tests.Controllers
         public async Task CreateUser_ShouldReturnNoContent_WhenUserIsCreatedSuccessfully()
         {
             // Arrange
-            var userDTO = new UserDTO { Password = "password123", Photo = _string64base };
+            var userDTO = new UserDTO
+            {
+                Password = "password123",
+                Photo = _string64base,
+                Address = "Some",
+                CityId = 1,
+                Document = "Any",
+                Email = "Some",
+                FirstName = "Test",
+                Id = "123",
+                LastName = "Test",
+                PasswordConfirm = "password123",
+                PhoneNumber = "Any",
+                UserName = "Test",
+                UserType = UserType.User
+            };
             var user = new User();
             _mockFileStorage.Setup(x => x.SaveFileAsync(It.IsAny<byte[]>(), ".jpg", _container))
                 .ReturnsAsync("photoUrl");

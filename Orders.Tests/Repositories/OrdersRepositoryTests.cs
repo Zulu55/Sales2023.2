@@ -185,6 +185,9 @@ namespace Orders.Tests.Repositories
             // Assert
             Assert.IsTrue(response.WasSuccess);
             Assert.AreEqual(OrderStatus.Sent, response.Result!.OrderStatus);
+            Assert.AreEqual(0, response.Result!.Lines);
+            Assert.AreEqual(0, response.Result!.Quantity);
+            Assert.AreEqual(0, response.Result!.Value);
             _mockUserHelper.Verify(x => x.GetUserAsync(email), Times.Once());
             _mockUserHelper.Verify(x => x.IsUserInRoleAsync(user, UserType.Admin.ToString()), Times.Once());
         }
@@ -244,7 +247,7 @@ namespace Orders.Tests.Repositories
 
         private async Task<Order> CreateTestOrder(User user)
         {
-            var order = new Order { User = user };
+            var order = new Order { UserId = user.Id };
             await _context.Orders.AddAsync(order);
             await _context.SaveChangesAsync();
             return order;

@@ -27,7 +27,10 @@ namespace Orders.Tests.Controllers
         public async Task GetComboAsync_ReturnsOkObjectResult()
         {
             // Arrange
-            var comboData = new List<Category> { new Category() };
+            var comboData = new List<Category>
+            {
+                new Category {  Id = 1, Name = "Some", ProductCategories = new List<ProductCategory>() }
+            };
             _mockCategoriesUnitOfWork.Setup(x => x.GetComboAsync()).ReturnsAsync(comboData);
 
             // Act
@@ -37,6 +40,7 @@ namespace Orders.Tests.Controllers
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
             var okResult = result as OkObjectResult;
             Assert.AreEqual(comboData, okResult!.Value);
+            Assert.AreEqual(comboData[0].ProductCategoriesNumber, 0);
             _mockCategoriesUnitOfWork.Verify(x => x.GetComboAsync(), Times.Once());
         }
 

@@ -137,7 +137,7 @@ namespace Orders.Frontend.Pages.Products
         private async Task LoadCategoriesAsync()
         {
             loading = true;
-            var httpResponse = await repository.GetAsync<List<Category>>("/api/categories");
+            var httpResponse = await repository.GetAsync<List<Category>>("/api/categories/combo");
 
             if (httpResponse.Error)
             {

@@ -47,7 +47,14 @@ namespace Orders.Tests.Helpers
             var user = new User { Email = email };
             _userHelperMock.Setup(uh => uh.GetUserAsync(email)).ReturnsAsync(user);
             _temporalOrdersUoWMock.Setup(touw => touw.GetAsync(email))
-                .ReturnsAsync(new Response<IEnumerable<TemporalOrder>> { WasSuccess = false });
+                .ReturnsAsync(new Response<IEnumerable<TemporalOrder>>
+                {
+                    WasSuccess = false,
+                    Result = new List<TemporalOrder>
+                    {
+                        new TemporalOrder { Id = 1, ProductId = 1, Quantity = 1, Remarks = "Some", UserId = "123" },
+                    }
+                });
 
             // Act
             var result = await _ordersHelper.ProcessOrderAsync(email, "remarks");
