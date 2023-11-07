@@ -1,4 +1,6 @@
-﻿namespace Orders.Backend.Helpers
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Orders.Backend.Helpers
 {
     public interface IFileStorage
     {
@@ -6,6 +8,7 @@
 
         Task RemoveFileAsync(string path, string containerName);
 
+        [ExcludeFromCodeCoverage(Justification = "Not used in the project.")]
         async Task<string> EditFileAsync(byte[] content, string extention, string containerName, string path)
         {
             if (path is not null)

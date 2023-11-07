@@ -1,8 +1,10 @@
 ﻿using MailKit.Net.Smtp;
 using MimeKit;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Orders.Backend.Helpers
 {
+    [ExcludeFromCodeCoverage(Justification = "It is a wrapper used to test other classes. There is no way to prove it.")]
     public class SmtpClientWrapper : ISmtpClient
     {
         private readonly SmtpClient _smtpClient = new SmtpClient();
